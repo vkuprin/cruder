@@ -1,0 +1,61 @@
+version: '3'
+services:
+  account-service:
+    build:
+      context: ..
+      target: ${TARGET:-dev}
+    image: ${IMAGE:-account-service}:${IMAGE_TAG:-dev}
+    networks:
+      - local-network
+      - account-network
+    ports:
+      - ${PORT:-3001}:3001
+      - 9223:9222
+    depends_on:
+      - postgres
+    volumes:
+      - .:/src
+    command:
+      - npm
+      - run
+      - ${START_SCRIPT:-start:dev}
+
+  postgres:
+    image: postgres
+    hostname: postgres_account
+    restart: always
+    networks:
+      - account-network
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: account-service
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+
+  pgadmin:
+    container_name: pgadmin4_container_account
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      - account-network
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    logging:
+      driver: none
+    ports:
+      - 5050:80
+
+volumes:
+  db-data:
+
+networks:
+  local-network:
+    name: local-network
+  account-network:
+    name: account-network

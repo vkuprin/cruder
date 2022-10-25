@@ -1,0 +1,28 @@
+.selectStyled {
+    background-color: #ffffff;
+}
+ .selectStyled :hover {
+     border-color: var(--color_additional_darken-1);
+ }
+
+.selectStyled .stateInvalid {
+     background-color: var(--color_decoration-1_lighten);
+     border-color: var(--color_decoration-1_darken);
+ }
+
+.selectStyled .stateSuccess {
+     background-color: var(--color_decoration-4_lighten);
+     border-color: var(--color_decoration-4_darken);
+ }
+
+.selectStyled .stateDisabled {
+     pointer-events: none;
+ }
+
+.fieldLabel {
+    display: block;
+    font-size: 14px;
+    color: var(--color_additional_darken-2);
+}
+
+

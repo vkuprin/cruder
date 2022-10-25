@@ -1,0 +1,88 @@
+version: '3'
+services:
+  account-service:
+    build:
+      context: ..
+      target: ${TARGET:-dev}
+    image: ${IMAGE:-account-service}:${IMAGE_TAG:-dev}
+    networks:
+      - local-network
+    ports:
+      - ${PORT:-3000}:3000
+      - 9222:9222
+    env_file:
+      - ../.env
+    depends_on:
+      - kafka
+      - postgres
+    volumes:
+      - .:/src
+    command: bash -c "npm run fix:bcrypt && npm run start:dev"
+
+  postgres:
+    image: postgres
+    hostname: postgres-account
+    restart: always
+    networks:
+      - local-network
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: account-service
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      - local-network
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    logging:
+      driver: none
+    ports:
+      - 5050:80
+
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper:latest
+    networks:
+      - local-network
+    ports:
+      - 2181:2181
+    logging:
+      driver: none
+
+  kafka:
+    container_name: kafka
+    image: wurstmeister/kafka:2.11-1.1.1
+    hostname: kafka
+    networks:
+      - local-network
+    ports:
+      - 9092:9092
+    links:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    logging:
+      driver: none
+
+volumes:
+  db-data:
+
+networks:
+  local-network:
+    name: local-network

@@ -1,0 +1,71 @@
+{
+  "name": "cruder",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "lint": "yarn eslint",
+    "lint:fix": "eslint --fix src",
+    "lint:all": "eslint src",
+    "rebuild": "rm -rf yarn.lock && rm -rf node_modules && yarn install",
+    "typescript": "tsc -p ./tsconfig.json --pretty --noEmit",
+    "test:end-to-end": "yarn playwright test",
+    "test:report": "npx playwright show-report"
+  },
+  "engines": {
+    "node": "16.13.0",
+    "yarn": "3.2.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "yarn lint"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@types/uuid": "^8.3.4",
+    "antd": "^4.23.0",
+    "classnames": "^2.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "6.3.0",
+    "react-use": "^17.4.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.25.2",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
+    "@vitejs/plugin-react": "^2.1.0",
+    "eslint": "8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.7",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "sass": "^1.54.8",
+    "typescript": "^4.8.2",
+    "vite": "^3.1.0"
+  }
+}
