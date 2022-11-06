@@ -15,6 +15,15 @@ const getHeaders = (token: string | null) => ({
   Authorization: `Bearer ${token}`,
 });
 
+export const getUserToken = () => {
+  try {
+    const token = JSON.parse(localStorage.getItem('auth') || '')?.access_token;
+    return token;
+  } catch (e) {
+    return null;
+  }
+};
+
 export const responseParser = async (response: { json: () => any; }) => {
   let result;
   try {
