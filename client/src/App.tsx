@@ -4,7 +4,7 @@ import SignInPage from './pages/SignInPage';
 import MainLayout from './layouts/MainLayout';
 import { AuthProvider, RequireAuth } from './context/AuthProvider';
 import { UserProvider } from './context/UserProvider';
-import 'antd/dist/antd.css';
+import '../node_modules/antd/dist/reset.css';
 import './styles/main.scss';
 import './styles/responsive.scss';
 import './styles/form.scss';
@@ -20,55 +20,55 @@ interface ProtectedMainLayoutProps {
 }
 
 const ProtectedMainLayout = ({ children }: ProtectedMainLayoutProps) => (
-  <RequireAuth>
-    <MainLayout>
-      {children}
-    </MainLayout>
-  </RequireAuth>
+    <RequireAuth>
+        <MainLayout>
+            {children}
+        </MainLayout>
+    </RequireAuth>
 );
 
 const App = () => {
-  const Components: Record<string, () => JSX.Element> = {
-    home: ProviderPage,
-    users: UsersPage,
-    user_types: UserTypesPage,
-    product_types: ProductTypesPage,
-    profile: ProfilePage,
-    hello: ProfilePage,
-    '/profile/:ID': ProfilePage,
-  };
+    const Components: Record<string, () => JSX.Element> = {
+        home: ProviderPage,
+        users: UsersPage,
+        user_types: UserTypesPage,
+        product_types: ProductTypesPage,
+        profile: ProfilePage,
+        hello: ProfilePage,
+        '/profile/:ID': ProfilePage,
+    };
 
-  const SpecificRoute = (routeName: string) => {
-    const Component = Components[routeName];
-    return Component ? <Component /> : <h1>Not found</h1>;
-  };
+    const SpecificRoute = (routeName: string) => {
+        const Component = Components[routeName];
+        return Component ? <Component /> : <h1>Not found</h1>;
+    };
 
-  return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <AuthProvider>
-          <UserProvider>
-            <Routes>
-              <Route path="/" element={<SignInPage />} />
-              {
-              Object.keys(Components).map((route) => (
-                <Route
-                  path={`/${route}`}
-                  key={route}
-                  element={(
-                    <ProtectedMainLayout>
-                      {SpecificRoute(route)}
-                    </ProtectedMainLayout>
-                )}
-                />
-              ))
-      }
-            </Routes>
-          </UserProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
-  );
+    return (
+        <ErrorBoundary>
+            <BrowserRouter>
+                <AuthProvider>
+                    <UserProvider>
+                        <Routes>
+                            <Route path="/" element={<SignInPage />} />
+                            {
+                                Object.keys(Components).map((route) => (
+                                    <Route
+                                        path={`/${route}`}
+                                        key={route}
+                                        element={(
+                                            <ProtectedMainLayout>
+                                                {SpecificRoute(route)}
+                                            </ProtectedMainLayout>
+                                        )}
+                                    />
+                                ))
+                            }
+                        </Routes>
+                    </UserProvider>
+                </AuthProvider>
+            </BrowserRouter>
+        </ErrorBoundary>
+    );
 };
 
 export default App;
